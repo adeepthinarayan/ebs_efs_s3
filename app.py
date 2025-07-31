@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 # import os
 from werkzeug.utils import secure_filename
 # import mysql.connector
-from mysql.connector import Error
+# from mysql.connector import Error
 
 app = Flask(__name__)
 # app.config['UPLOAD_FOLDER'] = '/tmp'
