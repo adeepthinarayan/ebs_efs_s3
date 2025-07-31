@@ -6,34 +6,34 @@ import mysql.connector
 from mysql.connector import Error
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/tmp'
+# app.config['UPLOAD_FOLDER'] = '/tmp'
 
 # ---------- AWS S3 CONFIG ----------
-S3_BUCKET = 'ihtpeed'  # Replace with your bucket name
-S3_REGION = 'us-east-1'  # Replace with your region
-s3 = boto3.client('s3', region_name=S3_REGION)
+# S3_BUCKET = 'ihtpeed'  # Replace with your bucket name
+# S3_REGION = 'us-east-1'  # Replace with your region
+# s3 = boto3.client('s3', region_name=S3_REGION)
 
 # ---------- MYSQL RDS CONFIG ----------
-DB_CONFIG = {
-    'host': 'deepthi.cbmwd77sfjx4.us-east-1.rds.amazonaws.com',
-    'user': 'admin',
-    'password': 'deepthi123!',
-    'database': 'babycontest'
-}
+# DB_CONFIG = {
+#     'host': 'deepthi.cbmwd77sfjx4.us-east-1.rds.amazonaws.com',
+#     'user': 'admin',
+#     'password': 'deepthi123!',
+#     'database': 'babycontest'
+# }
 
-def insert_to_db(baby_name, baby_age, parent_name, contact, image_url):
-    try:
-        connection = mysql.connector.connect(**DB_CONFIG)
-        cursor = connection.cursor()
-        cursor.execute("""
-            INSERT INTO entries (baby_name, baby_age, parent_name, contact, s3_image_url)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (baby_name, baby_age, parent_name, contact, image_url))
-        connection.commit()
-        cursor.close()
-        connection.close()
-    except Error as e:
-        print("Database error:", e)
+# def insert_to_db(baby_name, baby_age, parent_name, contact, image_url):
+#     try:
+#         connection = mysql.connector.connect(**DB_CONFIG)
+#         cursor = connection.cursor()
+#         cursor.execute("""
+#             INSERT INTO entries (baby_name, baby_age, parent_name, contact, s3_image_url)
+#             VALUES (%s, %s, %s, %s, %s)
+#         """, (baby_name, baby_age, parent_name, contact, image_url))
+#         connection.commit()
+#         cursor.close()
+#         connection.close()
+#     except Error as e:
+#         print("Database error:", e)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_form():
@@ -45,28 +45,28 @@ def upload_form():
         contact = request.form['contact']
         file = request.files['baby_image']
 
-        if file and file.filename != '':
-            filename = secure_filename(file.filename)
-            local_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(local_path)
+        # if file and file.filename != '':
+        #     filename = secure_filename(file.filename)
+        #     local_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        #     file.save(local_path)
 
-            # Upload to S3
-            try:
-                s3.upload_file(local_path, S3_BUCKET, filename)
-                image_url = f"https://{S3_BUCKET}.s3.{S3_REGION}.amazonaws.com/{filename}"
-            except Exception as e:
-                return f"Upload failed: {str(e)}"
+        #     # Upload to S3
+        #     try:
+        #         s3.upload_file(local_path, S3_BUCKET, filename)
+        #         image_url = f"https://{S3_BUCKET}.s3.{S3_REGION}.amazonaws.com/{filename}"
+        #     except Exception as e:
+        #         return f"Upload failed: {str(e)}"
 
-            # Insert into DB
-            insert_to_db(baby_name, baby_age, parent_name, contact, image_url)
+        #     # Insert into DB
+        #     insert_to_db(baby_name, baby_age, parent_name, contact, image_url)
 
-            return render_template('form.html',
-                                   submitted=True,
-                                   baby_name=baby_name,
-                                   baby_age=baby_age,
-                                   parent_name=parent_name,
-                                   contact=contact,
-                                   image_url=image_url)
+        #     return render_template('form.html',
+        #                            submitted=True,
+        #                            baby_name=baby_name,
+        #                            baby_age=baby_age,
+        #                            parent_name=parent_name,
+        #                            contact=contact,
+        #                            image_url=image_url)
 
     return render_template('form.html', submitted=False)
 
