@@ -2,8 +2,8 @@ from flask import Flask, render_template, request
 import boto3
 import os
 from werkzeug.utils import secure_filename
-# import mysql.connector
-# from mysql.connector import Error
+import mysql.connector
+from mysql.connector import Error
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/tmp'
@@ -14,26 +14,26 @@ S3_REGION = 'us-east-1'  # Replace with your region
 s3 = boto3.client('s3', region_name=S3_REGION)
 
 # ---------- MYSQL RDS CONFIG ----------
-# DB_CONFIG = {
-#     'host': 'deepthi.cbmwd77sfjx4.us-east-1.rds.amazonaws.com',
-#     'user': 'admin',
-#     'password': 'deepthi123!',
-#     'database': 'babycontest'
-# }
+DB_CONFIG = {
+    'host': 'deepthi.cbmwd77sfjx4.us-east-1.rds.amazonaws.com',
+    'user': 'admin',
+    'password': 'deepthi123!',
+    'database': 'babycontest'
+}
 
-# def insert_to_db(baby_name, baby_age, parent_name, contact, image_url):
-#     try:
-#         connection = mysql.connector.connect(**DB_CONFIG)
-#         cursor = connection.cursor()
-#         cursor.execute("""
-#             INSERT INTO entries (baby_name, baby_age, parent_name, contact, s3_image_url)
-#             VALUES (%s, %s, %s, %s, %s)
-#         """, (baby_name, baby_age, parent_name, contact, image_url))
-#         connection.commit()
-#         cursor.close()
-#         connection.close()
-#     except Error as e:
-#         print("Database error:", e)
+def insert_to_db(baby_name, baby_age, parent_name, contact, image_url):
+    try:
+        connection = mysql.connector.connect(**DB_CONFIG)
+        cursor = connection.cursor()
+        cursor.execute("""
+            INSERT INTO entries (baby_name, baby_age, parent_name, contact, s3_image_url)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (baby_name, baby_age, parent_name, contact, image_url))
+        connection.commit()
+        cursor.close()
+        connection.close()
+    except Error as e:
+        print("Database error:", e)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_form():
@@ -58,7 +58,7 @@ def upload_form():
                 return f"Upload failed: {str(e)}"
 
         #     # Insert into DB
-        #     insert_to_db(baby_name, baby_age, parent_name, contact, image_url)
+            insert_to_db(baby_name, baby_age, parent_name, contact, image_url)
 
             return render_template('form.html',
                                    submitted=True,
