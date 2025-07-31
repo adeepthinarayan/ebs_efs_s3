@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request
-import boto3
-import os
+# import boto3
+# import os
 from werkzeug.utils import secure_filename
-import mysql.connector
+# import mysql.connector
 from mysql.connector import Error
 
 app = Flask(__name__)
