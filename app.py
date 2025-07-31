@@ -9,14 +9,14 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/tmp'
 
 # ---------- AWS S3 CONFIG ----------
-S3_BUCKET = 'ihtpeed'  # Replace with your bucket name
-S3_REGION = 'us-east-1'  # Replace with your region
+S3_BUCKET = 'nec1-training-bucket'  # Replace with your bucket name
+S3_REGION = 'ap-south-2'  # Replace with your region
 s3 = boto3.client('s3', region_name=S3_REGION)
 
 # ---------- MYSQL RDS CONFIG ----------
 DB_CONFIG = {
-    'host': 'deepthi.cbmwd77sfjx4.us-east-1.rds.amazonaws.com',
-    'user': 'admin',
+    'host': 'deepthi-db.cl6eea0oqjdo.ap-south-2.rds.amazonaws.com',
+    'user': 'deepthi',
     'password': 'deepthi123!',
     'database': 'babycontest'
 }
