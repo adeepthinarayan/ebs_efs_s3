@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Baby Photo Contest</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #e6f0ff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 60%;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #3366cc;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #003366;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cccccc;
+      border-radius: 5px;
+    }
+    .button-wrapper {
+      text-align: center;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 30px;
+      background: #007BFF;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .submitted {
+      background-color: #f0fff0;
+      border: 1px solid #aaffaa;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+    .submitted img {
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Baby Photo Contest Entry</h1>
+
+    {% if submitted %}
+      <div class="submitted">
+        <h3>Submission Received!</h3>
+        <p><strong>Baby Name:</strong> {{ baby_name }}</p>
+        <p><strong>Baby Age:</strong> {{ baby_age }}</p>
+        <p><strong>Parent Name:</strong> {{ parent_name }}</p>
+        <p><strong>Contact:</strong> {{ contact }}</p>
+        {% if image_url %}
+          <p><strong>Uploaded Image:</strong></p>
+          <img src="{{ image_url }}" alt="Baby Image">
+        {% endif %}
+      </div>
+    {% else %}
+      <form method="POST" enctype="multipart/form-data">
+        <label for="baby_name">Baby Name</label>
+        <input type="text" id="baby_name" name="baby_name" required>
+
+        <label for="baby_age">Baby Age</label>
+        <input type="number" id="baby_age" name="baby_age" min="0" required>
+
+        <label for="parent_name">Parent's Name</label>
+        <input type="text" id="parent_name" name="parent_name" required>
+
+        <label for="contact">Contact Number</label>
+        <input type="text" id="contact" name="contact" required>
+
+        <label for="baby_image">Upload Baby Photo</label>
+        <input type="file" id="baby_image" name="baby_image" accept="image/*" required>
+
+        <div class="button-wrapper">
+          <button type="submit">Submit Entry</button>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+</body>
+</html>
